@@ -10,7 +10,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   css: [],
-  plugins: [],
+  plugins: ['@/plugins/miragejs'],
   components: false,
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss'],
   modules: ['@nuxtjs/axios', '@nuxtjs/pwa'],
@@ -23,4 +23,4 @@ export default {
     },
   },
   build: {},
-}
+};
