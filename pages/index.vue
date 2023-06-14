@@ -9,6 +9,7 @@
         <product-card
           v-for="product in products"
           :key="product.id"
+          :product="product"
         ></product-card>
       </div>
     </div>
