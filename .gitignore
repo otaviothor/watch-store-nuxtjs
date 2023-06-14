@@ -68,6 +68,9 @@ typings/
 # nuxt.js build output
 .nuxt
 
+# husky hooks
+.husky
+
 # Nuxt generate
 dist
 
