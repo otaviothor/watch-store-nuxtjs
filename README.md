@@ -17,7 +17,11 @@ O projeto contém códigos gerados através do Módulo 2 - Vue/Nuxt do curso sob
 ## 🚀 Como executar
 
 - Clone o repositório
-- ...
+- Instale as dependências com `npm i`
+- Rode os testes com o comando `npm run test`
+- Caso queira rodar os testes em tempo de desenvolvimento sem a necessidade de ficar parando e iniciando toda vez, basta rodar com o comando `npm run test:watch`
+- Para gerar o coverage, basta rodar `npm run test:coverage`
+- E caso queira rodar o projeto no browser, basta rodar `npm run dev` e acessar [`http://localhost:3000`](http://localhost:3000) no seu navegador
 
 ## 📄 Licença
 
