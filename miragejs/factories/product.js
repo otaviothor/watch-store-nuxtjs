@@ -30,7 +30,7 @@ export default {
       return faker.commerce.price();
     },
     image() {
-      return images[randomNumber(10)];
+      return images[randomNumber(14)];
     },
   }),
 };
