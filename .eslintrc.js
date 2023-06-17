@@ -17,5 +17,6 @@ module.exports = {
     'import/order': 'off',
     'import/no-named-as-default-member': 'off',
     'unicorn/error-message': 'off',
+    'no-unused-vars': 'off',
   },
 };

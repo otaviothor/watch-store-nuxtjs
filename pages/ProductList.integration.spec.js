@@ -70,4 +70,67 @@ describe('ProductList - unit', () => {
 
     expect(wrapper.text()).toContain('Problems when loading list');
   });
+
+  it('should filter the product list when search is performed', async () => {
+    // arrange
+    const products = [
+      ...server.createList('product', 10),
+      server.create('product', {
+        title: 'my loved watch',
+      }),
+      server.create('product', {
+        title: 'my other loved watch',
+      }),
+    ];
+    axios.get.mockReturnValue(Promise.resolve({ data: { products } }));
+
+    const wrapper = mount(ProductList, {
+      mocks: {
+        $axios: axios,
+      },
+    });
+
+    await Vue.nextTick();
+
+    // act
+    const search = wrapper.findComponent(Search);
+    search.find('input[type="search"]').setValue('watch');
+    await search.find('form').trigger('submit');
+
+    // assert
+    const cards = wrapper.findAllComponents(ProductCard);
+    expect(wrapper.vm.searchTerm).toEqual('watch');
+    expect(cards).toHaveLength(2);
+  });
+
+  it('should filter the product list when search is performed', async () => {
+    // arrange
+    const products = [
+      ...server.createList('product', 10),
+      server.create('product', {
+        title: 'my loved watch',
+      }),
+    ];
+    axios.get.mockReturnValue(Promise.resolve({ data: { products } }));
+
+    const wrapper = mount(ProductList, {
+      mocks: {
+        $axios: axios,
+      },
+    });
+
+    await Vue.nextTick();
+
+    // act
+    const search = wrapper.findComponent(Search);
+    search.find('input[type="search"]').setValue('watch');
+    await search.find('form').trigger('submit');
+    search.find('input[type="search"]').setValue('');
+    await search.find('form').trigger('submit');
+
+    // assert
+    const cards = wrapper.findAllComponents(ProductCard);
+    expect(wrapper.vm.searchTerm).toEqual('');
+    expect(cards).toHaveLength(11);
+  });
 });

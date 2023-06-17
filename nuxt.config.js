@@ -25,7 +25,7 @@ export default {
   build: {},
   watchers: {
     webpack: {
-      ignored: /(node_modules)|(.git)/,
+      ignored: /(node_modules)|(.git)|(\**.spec.js)/,
     },
   },
 };
