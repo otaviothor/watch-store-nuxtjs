@@ -18,5 +18,6 @@ module.exports = {
     'import/no-named-as-default-member': 'off',
     'unicorn/error-message': 'off',
     'no-unused-vars': 'off',
+    'require-await': 'off',
   },
 };
