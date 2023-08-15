@@ -19,5 +19,6 @@ module.exports = {
     'unicorn/error-message': 'off',
     'no-unused-vars': 'off',
     'require-await': 'off',
+    'vue/require-valid-default-prop': 'off',
   },
 };
