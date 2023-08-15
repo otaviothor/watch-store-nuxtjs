@@ -48,5 +48,9 @@
 <script>
 export default {
   name: 'CartItem',
+  props: {
+    product: Object,
+    required: true,
+  },
 };
 </script>

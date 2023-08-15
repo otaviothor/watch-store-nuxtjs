@@ -20,5 +20,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'require-await': 'off',
     'vue/require-valid-default-prop': 'off',
+    'vue/require-default-prop': 'off',
+    'vue/require-prop-type-constructor': 'off',
   },
 };
