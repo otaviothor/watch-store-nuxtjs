@@ -42,7 +42,6 @@ export default {
   },
   methods: {
     addToCart() {
-      this.$emit('addToCard', { product: this.product });
       cartState.open = true;
       cartState.items.push(this.product);
     },
