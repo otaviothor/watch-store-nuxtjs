@@ -15,8 +15,15 @@ describe('CartManager', () => {
   });
 
   it('should return the state', async () => {
-    // const state = manager.open();
-    // expect(state.open).toBe(true);
+    const product = server.create('product');
+    manager.open();
+    manager.addProduct(product);
+    const state = manager.getState();
+
+    expect(state).toEqual({
+      items: [product],
+      open: true,
+    });
   });
 
   it('should set cart to open', async () => {
