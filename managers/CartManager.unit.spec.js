@@ -1,5 +1,4 @@
 import { CartManager } from '@/managers/CartManager';
-import { mount } from '@vue/test-utils';
 import { makeServer } from '~/miragejs/server';
 
 describe('CartManager', () => {
@@ -13,6 +12,11 @@ describe('CartManager', () => {
 
   afterEach(() => {
     server.shutdown();
+  });
+
+  it('should return the state', async () => {
+    // const state = manager.open();
+    // expect(state.open).toBe(true);
   });
 
   it('should set cart to open', async () => {
@@ -35,13 +39,49 @@ describe('CartManager', () => {
     expect(state.items).toHaveLength(1);
   });
 
-  it('should remove product from the cart', async () => {});
+  it('should remove product from the cart', async () => {
+    const product = server.create('product');
+    const state = manager.removeProduct(product.id);
 
-  it('should clear products', async () => {});
+    expect(state.items).toHaveLength(0);
+  });
 
-  it('should clear cart', async () => {});
+  it('should clear products', async () => {
+    const product1 = server.create('product');
+    const product2 = server.create('product');
+    manager.addProduct(product1);
+    manager.addProduct(product2);
 
-  it('should return true if cart is not empty', async () => {});
+    const state = manager.clearProducts();
 
-  it('should returno true if product is already in the cart', async () => {});
+    expect(state.items).toHaveLength(0);
+  });
+
+  it('should clear cart', async () => {
+    const product1 = server.create('product');
+    const product2 = server.create('product');
+    manager.addProduct(product1);
+    manager.addProduct(product2);
+
+    const state = manager.clearCart();
+
+    expect(state.items).toHaveLength(0);
+    expect(state.open).toBeFalsy();
+  });
+
+  it('should return true if cart is not empty', async () => {
+    const product1 = server.create('product');
+    const product2 = server.create('product');
+    manager.addProduct(product1);
+    manager.addProduct(product2);
+
+    expect(manager.hasProducts()).toBeTruthy();
+  });
+
+  it('should return true if product is already in the cart', async () => {
+    const product = server.create('product');
+    manager.addProduct(product);
+
+    expect(manager.productIsInTheCart(product)).toBe(true);
+  });
 });
