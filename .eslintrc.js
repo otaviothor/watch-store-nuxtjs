@@ -22,5 +22,6 @@ module.exports = {
     'vue/require-valid-default-prop': 'off',
     'vue/require-default-prop': 'off',
     'vue/require-prop-type-constructor': 'off',
+    'no-undef': 'off',
   },
 };

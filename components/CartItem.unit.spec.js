@@ -1,20 +1,26 @@
 import CartItem from '@/components/CartItem';
+import { CartManager } from '@/managers/CartManager';
 import { makeServer } from '@/miragejs/server';
 import { mount } from '@vue/test-utils';
 
-const mountCartItem = (server) => {
+const mountCartItem = () => {
   const product = server.create('product', {
     title: 'Beautiful Watch',
     price: '22.33',
   });
 
+  const cartManager = new CartManager();
+
   const wrapper = mount(CartItem, {
     propsData: {
       product,
     },
+    mocks: {
+      $cart: cartManager,
+    },
   });
 
-  return { wrapper, product };
+  return { wrapper, product, cartManager };
 };
 
 describe('CartItem', () => {
@@ -29,7 +35,7 @@ describe('CartItem', () => {
   });
 
   it('should mount the component', () => {
-    const { wrapper, title } = mountCartItem(server);
+    const { wrapper, title } = mountCartItem();
     expect(wrapper.vm).toBeDefined();
   });
 
@@ -45,14 +51,14 @@ describe('CartItem', () => {
   });
 
   it('should display quantity 1 when product is first displayed', async () => {
-    const { wrapper } = mountCartItem(server);
+    const { wrapper } = mountCartItem();
     const quantity = wrapper.find('[data-testid="quantity"]');
 
     expect(quantity.text()).toContain('1');
   });
 
   it('should increase quantity when + button is clicked', async () => {
-    const { wrapper } = mountCartItem(server);
+    const { wrapper } = mountCartItem();
     const quantity = wrapper.find('[data-testid="quantity"]');
     const button = wrapper.find('[data-testid="+"]');
 
@@ -66,7 +72,7 @@ describe('CartItem', () => {
   });
 
   it('should decrease quantity when - button is clicked', async () => {
-    const { wrapper } = mountCartItem(server);
+    const { wrapper } = mountCartItem();
     const quantity = wrapper.find('[data-testid="quantity"]');
     const button = wrapper.find('[data-testid="-"]');
 
@@ -75,7 +81,7 @@ describe('CartItem', () => {
   });
 
   it('should not go below zero when - button is repeatedly clicked', async () => {
-    const { wrapper } = mountCartItem(server);
+    const { wrapper } = mountCartItem();
     const quantity = wrapper.find('[data-testid="quantity"]');
     const button = wrapper.find('[data-testid="-"]');
 
@@ -83,5 +89,21 @@ describe('CartItem', () => {
     await button.trigger('click');
 
     expect(quantity.text()).toContain('0');
+  });
+
+  it('should display a button to remove item from cart', async () => {
+    const { wrapper } = mountCartItem();
+    const button = wrapper.find('[data-testeid="remove-button"]');
+
+    expect(button.exists()).toBeTruthy();
+  });
+
+  it('should call cart manager removeProduct() when button gets clicked', async () => {
+    const { wrapper, cartManager, product } = mountCartItem();
+    const spy = jest.spyOn(cartManager, 'removeProduct');
+    await wrapper.find('[data-testeid="remove-button"]').trigger('click');
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(product.id);
   });
 });
