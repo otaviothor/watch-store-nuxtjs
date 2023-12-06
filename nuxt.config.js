@@ -1,5 +1,5 @@
 export default {
-  mode: 'spa',
+  mode: process.env.NODE_ENV === 'development' ? 'spa' : 'universal',
   head: {
     title: 'watch-store-nuxtjs',
     meta: [

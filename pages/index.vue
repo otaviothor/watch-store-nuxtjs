@@ -15,6 +15,7 @@
           v-for="product in list"
           :key="product.id"
           :product="product"
+          data-testid="product-card"
         ></product-card>
       </div>
     </div>
@@ -45,16 +46,15 @@ export default {
       return this.products;
     },
     quantityLabel() {
-      const {
-        list: { length },
-      } = this;
-
+      const length = this.list ? this.list.length : 0;
       return length === 1 ? `${length} Product` : `${length} Products`;
     },
   },
   async created() {
     try {
-      this.products = (await this.$axios.get('/api/products')).data.products;
+      const productsResponse = (await this.$axios.get('/api/products')).data
+        .products;
+      this.products = productsResponse || [];
     } catch (error) {
       this.errorMessage = 'Problems when loading list!';
     }
