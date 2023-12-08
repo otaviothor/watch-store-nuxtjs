@@ -25,5 +25,6 @@ module.exports = {
     'no-undef': 'off',
     'no-empty': 'off',
     'prefer-const': 'off',
+    'no-extra-boolean-cast': 'off',
   },
 };

@@ -9,7 +9,7 @@ Cypress.Commands.add('addToCart', (mode) => {
     cy.get('@productCards').eq(index).find('button').click({ force: true });
 
   const addByIndexes = () => {
-    for (const index of mode) {
+    for (const index of mode.indexes) {
       cy.get('@productCards').eq(index).find('button').click({ force: true });
     }
   };
@@ -22,11 +22,11 @@ Cypress.Commands.add('addToCart', (mode) => {
     });
   };
 
-  if (Array.isArray(mode)) {
+  if (!!mode.indexes && Array.isArray(mode.indexes)) {
     addByIndexes();
-  } else if (typeof mode === 'number') {
-    click(mode);
-  } else if (typeof mode === 'string' && mode === 'all') {
+  } else if (mode.index) {
+    click(mode.index);
+  } else if (!!mode.indexes && mode.indexes === 'all') {
     addAll();
   } else {
     throw new Error(
