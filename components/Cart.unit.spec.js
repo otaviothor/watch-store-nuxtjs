@@ -40,6 +40,20 @@ describe('Cart', () => {
     expect(wrapper.vm).toBeDefined();
   });
 
+  it('should not display empty cart when there are no products', () => {
+    const { cartManager } = mountCart();
+
+    const wrapper = mount(Cart, {
+      mocks: {
+        $cart: cartManager,
+      },
+    });
+
+    expect(
+      wrapper.find('[data-testid="clear-cart-button"]').exists()
+    ).toBeFalsy();
+  });
+
   it('should emit close event when button gets clicked', async () => {
     const { wrapper } = mountCart();
     await wrapper.find('[data-testid="close-button"]').trigger('click');
@@ -85,7 +99,7 @@ describe('Cart', () => {
 
   it('should display a button to clear cart', async () => {
     const { wrapper } = mountCart();
-    const button = wrapper.find('[data-testeid="clear-cart-button"]');
+    const button = wrapper.find('[data-testid="clear-cart-button"]');
 
     expect(button.exists()).toBeTruthy();
   });
@@ -93,7 +107,7 @@ describe('Cart', () => {
   it('should call cart manager clearProducts() when button gets clicked', async () => {
     const { wrapper, cartManager } = mountCart();
     const spy = jest.spyOn(cartManager, 'clearProducts');
-    await wrapper.find('[data-testeid="clear-cart-button"]').trigger('click');
+    await wrapper.find('[data-testid="clear-cart-button"]').trigger('click');
 
     expect(spy).toHaveBeenCalledTimes(1);
   });

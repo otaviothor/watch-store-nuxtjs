@@ -93,7 +93,7 @@ describe('CartItem', () => {
 
   it('should display a button to remove item from cart', async () => {
     const { wrapper } = mountCartItem();
-    const button = wrapper.find('[data-testeid="remove-button"]');
+    const button = wrapper.find('[data-testid="remove-button"]');
 
     expect(button.exists()).toBeTruthy();
   });
@@ -101,7 +101,7 @@ describe('CartItem', () => {
   it('should call cart manager removeProduct() when button gets clicked', async () => {
     const { wrapper, cartManager, product } = mountCartItem();
     const spy = jest.spyOn(cartManager, 'removeProduct');
-    await wrapper.find('[data-testeid="remove-button"]').trigger('click');
+    await wrapper.find('[data-testid="remove-button"]').trigger('click');
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(product.id);
