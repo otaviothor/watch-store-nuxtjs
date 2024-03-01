@@ -29,7 +29,4 @@ export default {
       ignored: /(node_modules)|(.git)|(\**.spec.js)/,
     },
   },
-  generate: {
-    dir: 'public',
-  },
 };
