@@ -1,6 +1,6 @@
 const { createServer, Response } = require('miragejs');
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' && !process.env.USE_API) {
   require('@/miragejs/server').makeServer();
 }
 

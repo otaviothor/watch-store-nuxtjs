@@ -15,9 +15,10 @@ export default {
   components: false,
   buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss'],
   modules: ['@nuxtjs/axios', '@nuxtjs/pwa'],
-  axios: {
-    baseURL: '/',
+  env: {
+    USE_API: !!process.env.USE_API,
   },
+  axios: {},
   pwa: {
     manifest: {
       lang: 'en',
