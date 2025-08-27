@@ -1,114 +1,108 @@
-import Cart from '@/components/Cart';
-import CartItem from '@/components/CartItem';
-import { CartManager } from '@/managers/CartManager';
-import { makeServer } from '@/miragejs/server';
 import { mount } from '@vue/test-utils';
-import Vue from 'vue';
+import CartItem from '@/components/CartItem';
+import { makeServer } from '@/miragejs/server';
+import { CartManager } from '@/managers/CartManager';
 
-describe('Cart', () => {
+describe('CartItem', () => {
   let server;
+
   beforeEach(() => {
     server = makeServer({ environment: 'test' });
   });
 
   afterEach(() => {
     server.shutdown();
-
-    jest.clearAllMocks();
   });
 
-  const mountCart = () => {
-    const products = server.createList('product', 2);
-
+  const mountCartItem = () => {
     const cartManager = new CartManager();
 
-    const wrapper = mount(Cart, {
+    const product = server.create('product', {
+      title: 'Lindo relogio',
+      price: '22.33',
+    });
+
+    const wrapper = mount(CartItem, {
       propsData: {
-        products,
+        product,
       },
       mocks: {
         $cart: cartManager,
       },
     });
 
-    return { wrapper, products, cartManager };
+    return { wrapper, product, cartManager };
   };
 
   it('should mount the component', () => {
-    const { wrapper } = mountCart();
-
+    const { wrapper } = mountCartItem();
     expect(wrapper.vm).toBeDefined();
   });
 
-  it('should not display empty cart when there are no products', () => {
-    const { cartManager } = mountCart();
+  it('should display product info', () => {
+    const {
+      wrapper,
+      product: { title, price },
+    } = mountCartItem();
+    const content = wrapper.text();
 
-    const wrapper = mount(Cart, {
-      mocks: {
-        $cart: cartManager,
-      },
-    });
-
-    expect(
-      wrapper.find('[data-testid="clear-cart-button"]').exists()
-    ).toBeFalsy();
+    expect(content).toContain(title);
+    expect(content).toContain(price);
   });
 
-  it('should emit close event when button gets clicked', async () => {
-    const { wrapper } = mountCart();
-    await wrapper.find('[data-testid="close-button"]').trigger('click');
+  it('should display quantity 1 when product is first displayed', () => {
+    const { wrapper } = mountCartItem();
+    const quantity = wrapper.find('[data-testid="quantity"]');
 
-    expect(wrapper.emitted().close).toBeTruthy();
-    expect(wrapper.emitted().close).toHaveLength(1);
+    expect(quantity.text()).toContain('1');
   });
 
-  it('should hide the cart when no prop isOpen is passed', async () => {
-    const { wrapper } = mountCart();
+  it('should increase quantity when + button gets clicked', async () => {
+    const { wrapper } = mountCartItem();
+    const quantity = wrapper.find('[data-testid="quantity"]');
+    const button = wrapper.find('[data-testid="+"]');
 
-    expect(wrapper.classes()).toContain('hidden');
+    await button.trigger('click');
+    expect(quantity.text()).toContain('2');
+    await button.trigger('click');
+    expect(quantity.text()).toContain('3');
+    await button.trigger('click');
+    expect(quantity.text()).toContain('4');
   });
 
-  it('should display the cart when prop isOpen is passed', async () => {
-    const { wrapper } = mountCart();
+  it('should decrease quantity when - button gets clicked', async () => {
+    const { wrapper } = mountCartItem();
+    const quantity = wrapper.find('[data-testid="quantity"]');
+    const button = wrapper.find('[data-testid="-"]');
 
-    await wrapper.setProps({
-      isOpen: true,
-    });
-
-    expect(wrapper.classes()).not.toContain('hidden');
+    await button.trigger('click');
+    expect(quantity.text()).toContain('0');
   });
 
-  it('should display cart "Cart is empty" when there are no products', async () => {
-    const { wrapper } = mountCart();
+  it('should not go below zero when button - is repeatedly clicked', async () => {
+    const { wrapper } = mountCartItem();
+    const quantity = wrapper.find('[data-testid="quantity"]');
+    const button = wrapper.find('[data-testid="-"]');
 
-    wrapper.setProps({
-      products: [],
-    });
+    await button.trigger('click');
+    await button.trigger('click');
 
-    await Vue.nextTick();
-
-    expect(wrapper.text()).toContain('Cart is empty');
+    expect(quantity.text()).toContain('0');
   });
 
-  it('should display 2 instances of CartItem when 2 products are provided', async () => {
-    const { wrapper } = mountCart();
+  it('should display a button to remove item from cart', () => {
+    const { wrapper } = mountCartItem();
+    const button = wrapper.find('[data-testid="remove-button"]');
 
-    expect(wrapper.findAllComponents(CartItem)).toHaveLength(2);
-    expect(wrapper.text()).not.toContain('Cart is empty');
+    expect(button.exists()).toBe(true);
   });
 
-  it('should display a button to clear cart', async () => {
-    const { wrapper } = mountCart();
-    const button = wrapper.find('[data-testid="clear-cart-button"]');
-
-    expect(button.exists()).toBeTruthy();
-  });
-
-  it('should call cart manager clearProducts() when button gets clicked', async () => {
-    const { wrapper, cartManager } = mountCart();
-    const spy = jest.spyOn(cartManager, 'clearProducts');
-    await wrapper.find('[data-testid="clear-cart-button"]').trigger('click');
+  it('should call cart manager removeProduct() when button gets clicked', async () => {
+    const { wrapper, cartManager, product } = mountCartItem();
+    const spy = jest.spyOn(cartManager, 'removeProduct');
+    await wrapper.find('[data-testid="remove-button"]').trigger('click');
 
     expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(product.id);
   });
 });
