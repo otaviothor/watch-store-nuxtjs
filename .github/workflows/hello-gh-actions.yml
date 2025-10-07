@@ -4,7 +4,8 @@ on:
   pull_request:
 
 jobs:
-  build: runs-on:ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
