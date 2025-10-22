@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2 ## action created by other person
+        with:
+          fetch-depth: 0 ## most high level of historic, not all commits
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 20.11.x
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest tests
+        run: npm run test
+
+      - name: Run Linter
+        run: npm run lint
