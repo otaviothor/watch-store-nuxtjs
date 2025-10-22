@@ -17,10 +17,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 12.18.x
+          node-version: 20.11.x
 
       - name: Install dependencies
         run: npm install
 
       - name: Run Jest tests
-        run: npx jest
+        run: npm run test
