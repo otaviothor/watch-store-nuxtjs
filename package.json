@@ -59,6 +59,7 @@
     "miragejs": "^0.1.47",
     "postcss": "^8.4.17",
     "prettier": "^2.7.1",
+    "pretty-quick": "^4.2.2",
     "start-server-and-test": "^2.0.3",
     "vue-jest": "^3.0.4"
   }
