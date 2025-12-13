@@ -34,12 +34,13 @@ jobs:
         run: npm run generate
 
       - name: Verify dist
-        run: ls -la dist || echo "dist not found"
+        run: ls -la ./dist || echo "dist not found"
 
       - name: Deploy to Netlify
-        uses: netlify/actions/cli@v3
+        uses: South-Paw/action-netlify-cli@v2
+        id: netlify
+        with:
+          args: 'deploy --dir \"./dist\" --prod'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        with:
-          args: deploy --dir=dist --prod --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN
