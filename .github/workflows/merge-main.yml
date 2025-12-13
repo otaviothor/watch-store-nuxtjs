@@ -36,10 +36,10 @@ jobs:
       - name: Verify dist
         run: ls -la dist || echo "dist not found"
 
-      - name: Deploy to netlify
-        uses: netlify/actions/cli@master
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@v3
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          args: deploy --dir=dist --prod
+          args: deploy --dir=dist --prod --site=$NETLIFY_SITE_ID --auth=$NETLIFY_AUTH_TOKEN
