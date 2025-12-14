@@ -50,5 +50,4 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: /
-          Após ${{ github.event.name }} o deploy foi feito na Netlify.
+          message: Após ${{ github.event.name }} o deploy foi feito na Netlify.
