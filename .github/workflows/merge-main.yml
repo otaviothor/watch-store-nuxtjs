@@ -27,9 +27,6 @@ jobs:
       - name: Run Jest tests
         run: npm run test
 
-      - name: Invoke failure
-        run: exit 1
-
       - name: Run Linter
         run: npm run lint
 
