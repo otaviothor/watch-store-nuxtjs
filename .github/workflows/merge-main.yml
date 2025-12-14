@@ -1,4 +1,4 @@
-name: ci
+name: merge-main-ci
 
 on:
   push:
@@ -21,12 +21,21 @@ jobs:
         with:
           node-version: 20.11.x
 
+      - uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps
 
       - name: Run Jest tests
         run: npm run test
-        
+
       - name: Run Linter
         run: npm run lint
 
