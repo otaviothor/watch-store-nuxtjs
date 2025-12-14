@@ -1,4 +1,4 @@
-name: ci
+name: pull-request-ci
 permissions:
   pull-requests: write
   contents: read
