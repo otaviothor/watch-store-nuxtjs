@@ -27,6 +27,9 @@ jobs:
       - name: Run Jest tests
         run: npm run test
 
+      - name: Invoke failure
+        run: exit 1
+
       - name: Run Linter
         run: npm run lint
 
@@ -45,9 +48,20 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: send custom message
+      - name: Notify Telegram - Success
         uses: appleboy/telegram-action@master
+        if: ${{ success() }}
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: Após ${{ github.event.name }} o deploy foi feito na Netlify.
+          message: |
+            Após ${{ github.event_name }} o deploy foi feito na Netlify. 🚀
+
+      - name: Notify Telegram - Failure
+        uses: appleboy/telegram-action@master
+        if: ${{ failure() }}
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Após ${{ github.event_name }} o deploy na Netlify falhou. 🚨
